@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, useReducer } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useReducer,
+  FC,
+  ChangeEvent,
+} from "react";
 import domtoimage from "dom-to-image";
 
 import { TYPES } from "./types";
@@ -7,12 +14,12 @@ import { initialState, reducer } from "./reducer";
 import styled, { createGlobalStyle } from "styled-components";
 import "./App.css";
 
-const App = () => {
+const App: FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { linea1, linea2, images, imageUrl } = state;
 
-  const [fontSize, setFontSize] = useState(32);
-  const divRef = useRef(null);
+  const [fontSize, setFontSize] = useState<number>(32);
+  const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     //Si no hay imagen retorna
@@ -22,12 +29,13 @@ const App = () => {
     dispatch({ type: TYPES.ADD_IMAGE_URL, payload: images });
   }, [images]);
 
-  const onImageChange = (e) => {
+  const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     //Obtener la imagen
+    dispatch({ type: TYPES.CLEAR_LINES });
     dispatch({ type: TYPES.ADD_IMAGES, payload: e.target.files });
   };
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: TYPES.ADD_LINES,
       field: e.currentTarget.name,
@@ -35,9 +43,10 @@ const App = () => {
     });
   };
 
-  const handleExport = (e) => {
+  const handleExport = () => {
     if (images.length < 1) return;
-    domtoimage.toPng(divRef.current, { quality: 1 }).then(function (dataUrl) {
+
+    domtoimage.toJpeg(divRef.current!, { quality: 1 }).then(function (dataUrl) {
       var link = document.createElement("a");
       link.download = imageUrl.name;
       link.href = dataUrl;
@@ -58,7 +67,7 @@ const App = () => {
             placeholder="Línea 1"
             onChange={handleInput}
             value={linea1}
-            maxLength="50"
+            maxLength={50}
             disabled={images.length < 1 && true}
           />
           <input
@@ -67,7 +76,7 @@ const App = () => {
             placeholder="Línea 2"
             onChange={handleInput}
             value={linea2}
-            maxLength="100"
+            maxLength={100}
             disabled={images.length < 1 && true}
           />
         </InputWrapper>
