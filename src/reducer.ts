@@ -8,7 +8,7 @@ interface ImageUrl {
 interface ReducerState {
   linea1: string;
   linea2: string;
-  images: any[];
+  images: FileList[];
   imageUrl: ImageUrl;
 }
 
@@ -31,7 +31,7 @@ type Clear_Lines = {
 
 type Add_images = {
   type: TYPES.ADD_IMAGES;
-  payload: FileList | null;
+  payload: FileList;
 };
 
 type Add_images_url = {

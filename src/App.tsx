@@ -32,7 +32,7 @@ const App: FC = () => {
   const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     //Obtener la imagen
     dispatch({ type: TYPES.CLEAR_LINES });
-    dispatch({ type: TYPES.ADD_IMAGES, payload: e.target.files });
+    dispatch({ type: TYPES.ADD_IMAGES, payload: e.target.files! });
   };
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
